@@ -1,0 +1,16 @@
+# Generated firmware and intermediate build files
+build/
+*.elf
+*.hex
+*.bin
+*.map
+*.o
+*.d
+
+# VS Code local indexes
+.vscode/.browse.VC.db*
+.vscode/ipch/
+
+# Local Codex workspace metadata
+.codex/
+.agents/
