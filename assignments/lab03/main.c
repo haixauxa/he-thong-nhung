@@ -9,21 +9,28 @@
 
 int main(void)
 {
-    // Bật clock GPIOA
+    uint32_t input;
+
+    // Enable GPIOA clock
     RCC_APB2ENR |= (1 << 2);
 
-    // PA0 - PA7: Input Pull-up
-    GPIOA_CRL = 0x88888888;
+    // PA0 - PA4: Input Pull-up
+    GPIOA_CRL &= ~(0xFFFFF);
+    GPIOA_CRL |= 0x88888;
 
-    // PA8 - PA15: Output Push-Pull, 50 MHz
-    GPIOA_CRH = 0x33333333;
+    // PA8 - PA12: Output Push-Pull, 50 MHz
+    GPIOA_CRH &= ~(0xFFFFF);
+    GPIOA_CRH |= 0x33333;
 
-    // Bật pull-up cho PA0 - PA7
-    GPIOA_ODR |= 0xFF;
+    // Select Pull-up for PA0 - PA4
+    GPIOA_ODR |= 0x1F;
 
     while (1)
     {
-        // Đọc 8 nút, đảo dữ liệu rồi xuất ra 8 LED
-        GPIOA_ODR = ((~GPIOA_IDR) & 0xFF) << 8;
+        input = (~GPIOA_IDR) & 0x1F;
+
+        // Preserve Pull-up selection bits while updating LEDs.
+        GPIOA_ODR &= ~(0x1F << 8);
+        GPIOA_ODR |= input << 8;
     }
 }
